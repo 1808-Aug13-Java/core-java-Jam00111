@@ -30,8 +30,19 @@ public class EvaluationService {
 	 * @return
 	 */
 	public String acronym(String phrase) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		if(phrase.length() < 1) {
+			System.out.println("The input phrse must have at least one character in it.");
+			return null;
+		}
+		String regex = "(( -))";
+		String[] eachWord = phrase.split("\\s+|-");
+		String acronym = "";
+		
+		for(String word: eachWord) {
+			acronym = acronym.concat(Character.toString(word.charAt(0)));
+		}
+		
+		return acronym.toUpperCase();
 	}
 
 	/**
@@ -84,17 +95,23 @@ public class EvaluationService {
 		}
 
 		public boolean isEquilateral() {
-			// TODO Write an implementation for this method declaration
+			if((sideOne == sideTwo) && (sideOne == sideThree) && (sideTwo == sideThree) ) {
+				return true;
+			}
 			return false;
 		}
 
 		public boolean isIsosceles() {
-			// TODO Write an implementation for this method declaration
+			if((sideOne == sideTwo) || (sideOne == sideThree) || (sideTwo == sideThree) ) {
+				return true;
+			}
 			return false;
 		}
 
 		public boolean isScalene() {
-			// TODO Write an implementation for this method declaration
+			if((sideOne != sideTwo) && (sideOne != sideThree) && (sideTwo != sideThree) ) {
+				return true;
+			}
 			return false;
 		}
 
