@@ -1,6 +1,10 @@
 package com.revature.eval.java.core;
 
+import static java.lang.Math.toIntExact;
+
 import java.time.temporal.Temporal;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +38,6 @@ public class EvaluationService {
 			System.out.println("The input phrse must have at least one character in it.");
 			return null;
 		}
-		String regex = "(( -))";
 		String[] eachWord = phrase.split("\\s+|-");
 		String acronym = "";
 		
@@ -133,8 +136,76 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int getScrabbleScore(String string) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+		
+		char[] letters = new char[string.length()];
+		string = string.toLowerCase();
+		int score =0;
+		
+		for(int j=0;j<string.length();j++) {
+			letters[j] = string.charAt(j);
+		}
+		
+		for(char letter: letters) {
+			switch (letter) {
+			case 'a': score = score +1;
+				break;
+			case 'b': score = score +3;
+				break;
+			case 'c': score = score +3;
+				break;
+			case 'd': score = score +2;
+				break;
+			case 'e': score = score +1;
+				break;
+			case 'f': score = score +4;
+				break;
+			case 'g': score = score +2;
+				break;
+			case 'h': score = score +4;
+				break;
+			case 'i': score = score +1;
+				break;	
+			case 'j': score = score +8;
+				break;
+			case 'k': score = score +5;
+				break;
+			case 'l': score = score +1;
+				break;
+			case 'm': score = score +3;
+				break;
+			case 'n': score = score +1;
+				break;
+			case 'o': score = score +1;
+				break;
+			case 'p': score = score +3;
+				break;
+			case 'q': score = score +10;
+				break;
+			case 'r': score = score +1;
+				break;
+			case 's': score = score +1;
+				break;
+			case 't': score = score +1;
+				break;
+			case 'u': score = score +1;
+				break;
+			case 'v': score = score +4;
+				break;
+			case 'w': score = score +4;
+				break;
+			case 'x': score = score +8;
+				break;
+			case 'y': score = score +4;
+				break;
+			case 'z': score = score +10;
+				break;
+			default : System.out.println("Your scrabble word contains an invalid character. Can not compute score.");
+				break;	
+				
+			}
+				
+		}
+		return score;
 	}
 
 	/**
@@ -169,8 +240,20 @@ public class EvaluationService {
 	 * NANP-countries, only 1 is considered a valid country code.
 	 */
 	public String cleanPhoneNumber(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		/*
+		 * Using a regular expression to remove all non-valid characters for a phone number I create a new string with all non alpha numeric
+		 * characters and white spaces removed.
+		 * Any strings that have too many or too few characters or letters after this process are not valid and throw an exception.
+		 * Also since we are not handling any international numbers all of the phone numbers after processing will only have
+		 * length of ten.
+		 */
+		String processedStr = string.replaceAll("\\s+|\\p{Punct}|-|!|@|#|$|%|^|&|\\*|=|\\+", "");
+
+			if((processedStr.matches("[0-9]*[a-z][a-z]*[0-9]*")) || (processedStr.length() > 11) || (processedStr.length() < 10)) {
+				throw new IllegalArgumentException();
+			}//I originally did a try catch block, but could not get it to be a success in the junit test. for time sake I did this if statement
+
+			return processedStr;
 	}
 
 	/**
@@ -183,8 +266,17 @@ public class EvaluationService {
 	 * @return
 	 */
 	public Map<String, Integer> wordCount(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		Map<String, Integer> wCount = new HashMap<String, Integer>();
+		String[] stringP = string.split("\\s+|\\p{Punct}");
+		
+		 for (String word : stringP) {
+			 if(word.isEmpty()) {
+			 }else {
+				 	Integer freq = wCount.get(word);
+				 	wCount.put(word, (freq == null) ? 1 : freq + 1);
+			 		}
+	        }
+		return wCount;
 	}
 
 	/**
@@ -226,8 +318,26 @@ public class EvaluationService {
 		private List<T> sortedList;
 
 		public int indexOf(T t) {
-			// TODO Write an implementation for this method declaration
-			return 0;
+			int start = 0;
+			int end = sortedList.size();
+			List<Integer> sortedList2 = new ArrayList<Integer>();
+				for(T str : sortedList) {
+					sortedList2.add(Integer.valueOf(str.toString()));
+				}
+			
+			 while (start <= end) {
+		            int mid = Math.floorDiv((start + end), 2);
+		            if (t.toString().equals(sortedList.get(mid).toString())) {
+		                return mid;
+		            }
+		            if (Integer.valueOf(t.toString()) < sortedList2.get(mid)) {
+		                end = mid - 1;		                
+		            } else {
+		                start = mid + 1; 
+		            }
+		        }
+
+			return -1;
 		}
 
 		public BinarySearch(List<T> sortedList) {
@@ -263,8 +373,47 @@ public class EvaluationService {
 	 * @return
 	 */
 	public String toPigLatin(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		
+		String[] eachWord = string.split("\\s+");
+		StringBuffer pigStr = new StringBuffer();
+		StringBuffer result = new StringBuffer();
+		
+		for(String str : eachWord) {
+			char firstChar = str.charAt(0);
+			pigStr.append(str);
+
+			switch (firstChar) {
+			
+				case 'a': pigStr.append("ay ");
+						  result.append(pigStr);
+						  pigStr.delete(0, pigStr.length());
+						  break;
+				case 'e': pigStr.append("ay ");
+						  result.append(pigStr);
+						  pigStr.delete(0, pigStr.length());
+						  break;
+				case 'i': pigStr.append("ay ");
+						  result.append(pigStr);
+						  pigStr.delete(0, pigStr.length());
+						  break;
+				case 'o': pigStr.append("ay ");
+						  result.append(pigStr);
+						  pigStr.delete(0, pigStr.length());
+						  break;
+				case 'u': pigStr.append("ay ");
+						  result.append(pigStr);
+						  pigStr.delete(0, pigStr.length());
+						  break;
+				default : pigStr.deleteCharAt(0); 
+						  pigStr.append(firstChar).append("ay "); 
+						  result.append(pigStr);
+						  pigStr.delete(0, pigStr.length());
+						  break;
+						  //TODO handle edge cases - prob write method to call from default to handle a recursive switch case
+			}
+		}
+		
+		return result.toString().trim();
 	}
 
 	/**
@@ -283,7 +432,22 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isArmstrongNumber(int input) {
-		// TODO Write an implementation for this method declaration
+		String stringifiedInput = String.valueOf(input);
+		int[] intArr = new int[stringifiedInput.length()];
+		int i = 0;
+		int j = 0;
+		int result = 0;
+		for(int k : intArr) {
+			i++;
+		}
+		for(int k : intArr) {
+			intArr[j] = Character.getNumericValue(stringifiedInput.charAt(j));
+			j++;
+			result = result +(int) Math.pow(intArr[j-1], i);
+		}
+		if(result == input) {
+				return true;
+		}
 		return false;
 	}
 
@@ -298,8 +462,21 @@ public class EvaluationService {
 	 * @return
 	 */
 	public List<Long> calculatePrimeFactorsOf(long l) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		List<Long> result = new ArrayList<Long>();
+		int num = toIntExact(l); //new to java 8 this safely casts a long to int
+		/*
+		 * this loop efficiently checks for a prime number using the modulo operator
+		 * the while loop is used so that it maintains persistence of the l=l/i statement. this would
+		 * probably be better as a recursive method, especially if we were going to use larger values
+		 */
+		for(int i=2;i<=num;i++) {
+		while(l%i == 0) {
+			result.add((long)i);
+			l = l/i;
+		}
+	}
+		
+		return result;
 	}
 
 	/**
