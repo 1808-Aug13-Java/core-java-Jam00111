@@ -14,6 +14,9 @@ public class EvaluationService {
 	 * 1. Without using the StringBuilder or StringBuffer class, write a method that
 	 * reverses a String. Example: reverse("example"); -> "elpmaxe"
 	 * 
+	 * 		Using a for loop I grab each element form the string starting at the end and
+	 * 		decrement backgrounds placing each grabbed element into the reversedStr using concat
+	 * 
 	 * @param string
 	 * @return
 	 */
@@ -35,7 +38,6 @@ public class EvaluationService {
 	 */
 	public String acronym(String phrase) {
 		if(phrase.length() < 1) {
-			System.out.println("The input phrse must have at least one character in it.");
 			return null;
 		}
 		String[] eachWord = phrase.split("\\s+|-");
@@ -43,8 +45,7 @@ public class EvaluationService {
 		
 		for(String word: eachWord) {
 			acronym = acronym.concat(Character.toString(word.charAt(0)));
-		}
-		
+		}	
 		return acronym.toUpperCase();
 	}
 
@@ -514,8 +515,31 @@ public class EvaluationService {
 		}
 
 		public String rotate(String string) {
-			// TODO Write an implementation for this method declaration
-			return null;
+			final String ALPHA = "abcdefghijklmnopqrstuvwxyz";
+			int charPos;
+			String cypheredTxt = "";
+			
+			for(int i=0;i<string.length();i++) {
+				boolean isUpper = Character.isUpperCase(string.charAt(i));
+				charPos = ALPHA.indexOf(Character.toLowerCase(string.charAt(i)));
+				if(charPos == -1) {
+					if(string.charAt(i) == ' ') {
+						cypheredTxt = cypheredTxt.concat(" ");
+					}else if(string.substring(i, i+1).matches("[0-9]|\\p{Punct}")){
+						cypheredTxt = cypheredTxt.concat(string.substring(i, i+1));
+					}
+				}else {
+					int keyValue = (key + charPos) % 26;
+					char replaceVal = ALPHA.charAt(keyValue);
+					if(isUpper) {
+						cypheredTxt = cypheredTxt.concat(Character.toString(replaceVal).toUpperCase());
+					}else {
+						cypheredTxt = cypheredTxt.concat(Character.toString(replaceVal));
+					}
+				}
+				
+			}
+			return cypheredTxt;
 		}
 
 	}
