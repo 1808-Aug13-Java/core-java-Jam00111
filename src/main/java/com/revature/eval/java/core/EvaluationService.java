@@ -844,8 +844,40 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isLuhnValid(String string) {
-		// TODO Write an implementation for this method declaration
-		return false;
+		int count = 0;
+		int parsed;
+		String processedStr = string.replaceAll("\\s+|\\p{Punct}", "");
+		if(processedStr.matches("[[0-9*]|[a-z+]|[a-z]*[0-9*]|[A-Z]*|[A-Z+][0-9]*]*")) {
+			return false;
+		}
+		char[] cCardNum = processedStr.toCharArray();
+		ArrayList<Integer> digits = new ArrayList<Integer>();
+		int luhn = 0;
+
+		for (char c : cCardNum) {
+			parsed = Integer.parseInt(String.valueOf(c));
+			if ((processedStr.length() % 2) != 0) {
+				if ((count % 2 != 0)) {
+					parsed = parsed * 2;
+					if (parsed > 9) {
+						parsed = parsed - 9;
+					}
+				}
+			} else {
+				if ((count % 2 == 0)) {
+					parsed = parsed * 2;
+					if (parsed > 9) {
+						parsed = parsed - 9;
+					}
+				}
+			}
+			count++;
+			digits.add(parsed);
+		}
+		for (int d : digits) {
+			luhn = luhn + d;
+		}
+		return luhn % 10 == 0 ? true : false;
 	}
 
 	/**
