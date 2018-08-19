@@ -2,6 +2,8 @@ package com.revature.eval.java.core;
 
 import static java.lang.Math.toIntExact;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoField;
 import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -769,8 +771,17 @@ public class EvaluationService {
 	 * @return
 	 */
 	public Temporal getGigasecondDate(Temporal given) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		LocalDateTime updated;
+
+		if (!given.isSupported(ChronoField.HOUR_OF_DAY)) {
+			updated = (LocalDateTime.of(given.get(ChronoField.YEAR), given.get(ChronoField.MONTH_OF_YEAR),
+					given.get(ChronoField.DAY_OF_MONTH), 0, 0, 0));
+
+			return updated.plusSeconds(1_000_000_000);
+		}
+
+		updated = (LocalDateTime) given;
+		return updated.plusSeconds(1_000_000_000);
 	}
 
 	/**
@@ -846,8 +857,8 @@ public class EvaluationService {
 	public boolean isLuhnValid(String string) {
 		int count = 0;
 		int parsed;
-		String processedStr = string.replaceAll("\\s+|\\p{Punct}", "");
-		if(processedStr.matches("[0-9]*[[A-Z]+|[a-z]][0-9]*+")) {
+		String processedStr = string.replaceAll("\\s+", "");
+		if(processedStr.matches("[0-9]*[[A-Z]+|[a-z]][0-9]*+|\\p{Punct}")) {
 			return false;
 		}
 		char[] cCardNum = processedStr.toCharArray();
