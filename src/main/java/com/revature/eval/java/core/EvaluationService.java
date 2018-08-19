@@ -847,7 +847,7 @@ public class EvaluationService {
 		int count = 0;
 		int parsed;
 		String processedStr = string.replaceAll("\\s+|\\p{Punct}", "");
-		if(processedStr.matches("[[0-9*]|[a-z+]|[a-z]*[0-9*]|[A-Z]*|[A-Z+][0-9]*]*")) {
+		if(processedStr.matches("[0-9]*[[A-Z]+|[a-z]][0-9]*+")) {
 			return false;
 		}
 		char[] cCardNum = processedStr.toCharArray();
@@ -908,8 +908,76 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int solveWordProblem(String string) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+
+		String processedStr = string.replaceAll("[What is]|\\s+|\\p{Punct}", "");
+		
+		String[] words = string.split("\\s+|\\?");
+		ArrayList<String> problem = new ArrayList<String>();
+		int result = 0;
+		int first = 0;
+		int second = 0;
+		ArrayList<Integer> nums = new ArrayList<Integer>();
+		String operator = "";
+		for (String w : words) {
+			if (w.equalsIgnoreCase("what") || w.equalsIgnoreCase("is") || w.equalsIgnoreCase("by")) {
+				// do not add to list
+			} else {
+				problem.add(w);
+			}
+		}
+		for (String p : problem) {
+			if (p.equalsIgnoreCase("plus") || p.equalsIgnoreCase("minus") || p.equalsIgnoreCase("multiplied")
+					|| p.equalsIgnoreCase("divided")) {
+				operator = p;
+			} else {
+				nums.add(Integer.parseInt(p));
+			}
+		}
+
+		if (operator.equalsIgnoreCase("plus")) {
+			for (int n : nums) {
+				result = result + n;
+			}
+		} else if (operator.equalsIgnoreCase("minus")) {
+			int a = 0;
+			for (int n : nums) {
+				a++;
+				if (a == 1) {
+					first = n;
+				} else {
+					second = n;
+				}
+			}
+			result = first - second;
+		} else if (operator.equalsIgnoreCase("multiplied")) {
+			int a = 0;
+			for (int n : nums) {
+				a++;
+				if (a == 1) {
+					first = n;
+				} else {
+					second = n;
+				}
+			}
+			result = first * second;
+		} else if (operator.equalsIgnoreCase("divided")) {
+			int a = 0;
+			for (int n : nums) {
+				a++;
+				if (a == 1) {
+					first = n;
+				} else {
+					second = n;
+				}
+			}
+			result = first / second;
+		} else {
+			/*
+			 * invalid operator
+			 */
+		}
+
+		return result;
 	}
 
 }
