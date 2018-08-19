@@ -640,7 +640,7 @@ public class EvaluationService {
 	 * size being 5 letters, and punctuation is excluded. This is to make it harder
 	 * to guess things based on word boundaries.
 	 * 
-	 * Examples Encoding test gives gvhg Decoding gvhg gives test Decoding gsvjf
+	 * Examples Encoding test gives gvhg :Decoding gvhg gives test: Decoding gsvjf
 	 * rxpyi ldmul cqfnk hlevi gsvoz abwlt gives thequickbrownfoxjumpsoverthelazydog
 	 *
 	 */
@@ -653,8 +653,25 @@ public class EvaluationService {
 		 * @return
 		 */
 		public static String encode(String string) {
-			// TODO Write an implementation for this method declaration
-			return null;
+			final String ALPHA = "abcdefghijklmnopqrstuvwxyz0123456789";
+			final String RALPHA = "zyxwvutsrqponmlkjihgfedcba0123456789";
+			int charPos;
+			String atbashTxt = "";
+			String processedStr = string.replaceAll("\\s+|\\p{Punct}", "");
+
+			for (int i = 0; i < processedStr.length(); i++) {
+				charPos = ALPHA.indexOf(Character.toLowerCase(processedStr.charAt(i)));
+				int j = i;
+				char replaceVal = RALPHA.charAt(charPos);
+				if (((j % 5) == 0)) {
+					atbashTxt = atbashTxt.concat(" ");
+					atbashTxt = atbashTxt.concat(Character.toString(replaceVal));
+				} else {
+					atbashTxt = atbashTxt.concat(Character.toString(replaceVal));
+				}
+
+			}
+			return atbashTxt.trim();
 		}
 
 		/**
@@ -664,8 +681,18 @@ public class EvaluationService {
 		 * @return
 		 */
 		public static String decode(String string) {
-			// TODO Write an implementation for this method declaration
-			return null;
+			final String RALPHA = "abcdefghijklmnopqrstuvwxyz0123456789";
+			final String ALPHA = "zyxwvutsrqponmlkjihgfedcba0123456789";
+			int charPos;
+			String rAtbashTxt = "";
+			String processedStr = string.replaceAll("\\s+|\\p{Punct}", "");
+
+			for (int i = 0; i < processedStr.length(); i++) {
+				charPos = ALPHA.indexOf(Character.toLowerCase(processedStr.charAt(i)));
+				char replaceVal = RALPHA.charAt(charPos);
+				rAtbashTxt = rAtbashTxt.concat(Character.toString(replaceVal));
+			}
+			return rAtbashTxt.trim();
 		}
 	}
 
@@ -692,8 +719,21 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isValidIsbn(String string) {
-		// TODO Write an implementation for this method declaration
-		return false;
+		String processedStr = string.replaceAll("\\s+|\\p{Punct}", "");
+		char[] ISBN = processedStr.toCharArray();
+		int procISBN = 0;
+		int j = 10;
+		for(char c: ISBN) {
+			if((c == 'X') && (j == 1)){
+				procISBN = procISBN + 10 * j;
+				return procISBN % 11 == 0 ? true : false;
+			}else if(Character.toString(c).matches("[a-z]*|[A-Z]*")) {
+				return false;
+			}
+			procISBN = procISBN + (Character.getNumericValue(c) * j);
+			j--;
+		}
+		return procISBN % 11 == 0 ? true : false;
 	}
 
 	/**
@@ -747,9 +787,25 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int getSumOfMultiples(int i, int[] set) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+		ArrayList<Integer> allMul = new ArrayList<Integer>();
+		HashSet<Integer> comMul = new HashSet<Integer>();
+		int result = 0;
+		for (int j : set) {
+			for (int k = 1; k < i; k++) {
+				if ((k % j) == 0) {
+					allMul.add(k);
+				}
+			}
+		}
+		for (int l : allMul) {
+			comMul.add(l);
+		}
+		for (int m : comMul) {
+			result = result + m;
+		}
+		return result;
 	}
+
 
 	/**
 	 * 19. Given a number determine whether or not it is valid per the Luhn formula.
