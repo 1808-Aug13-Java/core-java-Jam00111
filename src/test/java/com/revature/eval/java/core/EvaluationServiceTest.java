@@ -19,6 +19,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+/*
+ * Small change made to test git hub connection bbb
+ */
 public class EvaluationServiceTest {
 
 	private static final EvaluationService evaluationService = new EvaluationService();
